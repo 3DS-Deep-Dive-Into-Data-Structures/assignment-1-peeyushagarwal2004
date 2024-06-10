@@ -1,0 +1,61 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+void Calculator(string s,long long int l){
+    stack <int> sta;
+
+    int number=0 ; // Taking the input number as 0
+    int sign=1; // Taking 1 for positive sign and -1 for negative sign
+    int sum=0; // Taking the sum as 0
+
+    for(char ch : s){
+        
+        if(isdigit(ch))
+        {
+          number = number*10 + ch -'0';
+        }
+        else if(ch=='+'){
+            sum+=(number*sign);
+            number=0;
+            sign=1;  
+        }
+        else if (ch=='-'){
+             sum+=(number*sign);
+             number=0;
+             sign=-1;
+        }
+        else if (ch == '(') {
+            // Push the current result and sign onto the stack
+            sta.push(sum);
+            sta.push(sign);
+            // Reset the current result and sign for the new sub-expression
+            sum= 0;
+            sign = 1;
+        } else if (ch == ')') {
+            // Compute the current sub-expression result
+            sum += sign * number;
+            number = 0;
+            // Pop the sign and result from the stack and add to the current total
+            sum *= sta.top(); //  sign
+            sta.pop();
+            sum += sta.top(); //  result of before the parentheses
+            sta.pop();
+        }
+    }
+
+    //  last number to add
+    sum += sign * number;
+    cout << sum;
+        
+        
+    
+}
+int main(){
+    
+    string s; // Taking the string as input
+    cin >> s;
+    long long int length = s.length();
+    Calculator(s,length);
+    return 0;
+}
